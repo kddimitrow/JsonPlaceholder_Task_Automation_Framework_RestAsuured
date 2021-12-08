@@ -1,7 +1,6 @@
 package TestScenarios.T1_Tests;
 
 import RestAssuredHelpers.RestAssureBodySerialize;
-import RestAssuredHelpers.RestAssuredUtilMethods;
 import TestScenarios.BaseTest;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -15,26 +14,15 @@ public class T1_Tests extends BaseTest {
     //additional information
     String userOneTitleText = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit";
 
-    //paths
-    String getPostsPath = "/posts";
-    String getPostByNumberPath = "/posts/{PutUserNumber}";
     int   numberOfUserDetails = 1;
-    String getCommentsOfPostPath = "/posts/{PutUserNumber}/comments";
 
-    String postCreatePostPath = "/posts";
-
-    String deleteSpecificPostPath = "posts/{idOfPost}";
-
-    String putSpecificPostPath = "posts/{idOfPost}";
-
-
+    //body information
     public int id = 33;
     public String title = "Updated Title";
     public String body = "Updated Body";
     public int userId = 33;
 
-
-     private RestAssureBodySerialize assuredUtilMethodsSerialize = new RestAssureBodySerialize(id, title, body, userId);
+    private RestAssureBodySerialize assuredUtilMethodsSerialize = new RestAssureBodySerialize(id, title, body, userId);
 
 
 
@@ -44,7 +32,7 @@ public class T1_Tests extends BaseTest {
         restAssured.given().
                     spec(requestSpec).log().all().
                 when().
-                    get(getPostsPath).
+                    get(endpointPaths.getGetPostsPath()).
                 then().
                     log().all().assertThat().statusCode(200).extract().response();
 
@@ -53,14 +41,15 @@ public class T1_Tests extends BaseTest {
     }
 
 
+
     @Test
     public void T1_Get_PostBySpecificNumber_ValidateTitleLength(){
 
         Response response =  restAssured.given().
                                         spec(requestSpec).
-                                        pathParam("PutUserNumber", numberOfUserDetails).log().all().
+                                        pathParam("UserIdNumber", numberOfUserDetails).log().all().
                                     when().
-                                        get(getPostByNumberPath).
+                                        get(endpointPaths.getGetPostByNumberPath() ).
                                     then()
                                         .log().all().assertThat().statusCode(200).extract().response();
 
@@ -78,9 +67,9 @@ public class T1_Tests extends BaseTest {
 
                             restAssured.given().
                                                 spec(requestSpec).
-                                                pathParam("PutUserNumber", numberOfUserDetails).log().all().
+                                                pathParam("UserIdNumber", numberOfUserDetails).log().all().
                                          when().
-                                                get(getCommentsOfPostPath).
+                                                get(endpointPaths.getGetCommentsOfPostByUserIdPath()).
                                         then().
                                             statusCode(200).
                                                 body("email[2]", equalTo("Nikita@garfield.biz")).log().all();
@@ -94,9 +83,9 @@ public class T1_Tests extends BaseTest {
 
         String responseEmail =  restAssured.given().
                                                 spec(requestSpec).
-                                                pathParam("PutUserNumber", numberOfUserDetails).log().all().
+                                                pathParam("UserIdNumber", numberOfUserDetails).log().all().
                                             when().
-                                                get(getCommentsOfPostPath).
+                                                get(endpointPaths.getGetCommentsOfPostByUserIdPath()).
                                             then().
                                                 statusCode(200).log().all().
                                                 and().
@@ -118,7 +107,7 @@ public class T1_Tests extends BaseTest {
                         pathParam("idOfPost", id).
                         body(assuredUtilMethodsSerialize).log().all().
                 when().
-                        put(putSpecificPostPath).
+                        put(endpointPaths.getPutSpecificPostPath()).
                 then().
                 statusCode(200).log().all().extract().response();
     }
@@ -129,9 +118,9 @@ public class T1_Tests extends BaseTest {
 
         restAssured.given().
                             spec(requestSpec).
-                            body(assuredUtilMethods.returnJsonBodyAsStringOptionTwo()).log().all().
+                            body(assuredUtilMethods.returnJsonBodyAsStringWithSettledParameters()).log().all().
                     when().
-                            post(postCreatePostPath).
+                            post(endpointPaths.getPostCreatePostPath()).
                     then().
                             statusCode(201).log().all().extract().response();
 
@@ -142,13 +131,14 @@ public class T1_Tests extends BaseTest {
     public void T1_Delete_User(){
         restAssured.given().
                         spec(requestSpec).
-                        pathParam("idOfPost", assuredUtilMethods.userIdForBodyOptionTwo).
+                        pathParam("idOfPost", assuredUtilMethods.userIdForBodyForSettledParameters).
                 when().
-                        delete(deleteSpecificPostPath).
+                        delete(endpointPaths.getDeleteSpecificPostPath()).
                 then().
                         statusCode(200).log().all().extract().response();
 
     }
+
 
 
 

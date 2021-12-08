@@ -6,8 +6,8 @@ public class RestAssuredUtilMethods {
 
 
 
-    public String titleForBodyOptionTwo = "WgW";
-    public int userIdForBodyOptionTwo = 987;
+    public String titleForBodyForSettledParameters = "Great QA Engineer";
+    public int userIdForBodyForSettledParameters = 987;
 
 
 
@@ -24,12 +24,12 @@ public class RestAssuredUtilMethods {
     }
 
 
-    public String returnJsonBodyAsStringOptionTwo(){
+    public String returnJsonBodyAsStringWithSettledParameters(){
 
         String jsonBody = "{\n" +
-                "    \"title\": \""+titleForBodyOptionTwo +"\",\n" +
+                "    \"title\": \""+ titleForBodyForSettledParameters +"\",\n" +
                 "    \"body\": \"bar\",\n" +
-                "    \"userId\": \""+ userIdForBodyOptionTwo +"\"\n" +
+                "    \"userId\": \""+ userIdForBodyForSettledParameters +"\"\n" +
                 "  }";
 
 
@@ -38,6 +38,17 @@ public class RestAssuredUtilMethods {
     }
 
 
+    public String wrongJsonBodyAsString(){
+
+        String jsonBody = "{\n" +
+                "    \"title\": \"\",\n" +
+                "    \"body\": \"\",\n" +
+                "    \"userId\": \n" +
+                "  }";
+
+        return jsonBody;
+
+    }
 
 
 
